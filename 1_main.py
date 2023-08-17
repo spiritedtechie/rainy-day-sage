@@ -4,19 +4,15 @@ from datetime import datetime
 import requests
 from dotenv import load_dotenv
 from langchain.callbacks import get_openai_callback
-from langchain.chains.question_answering import load_qa_chain
+from langchain.chains import LLMChain, SequentialChain, TransformChain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CacheBackedEmbeddings, OpenAIEmbeddings
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.output_parsers import ResponseSchema, StructuredOutputParser
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    HumanMessagePromptTemplate,
-    SystemMessagePromptTemplate,
-)
 from langchain.storage import LocalFileStore
 from langchain.vectorstores import DeepLake
 
+import prompts.code_mapping_extract
+import prompts.weather_summary
 from convert_to_csv import convert_to_csv
 from transform_forecast_data import transform_data
 
@@ -51,69 +47,42 @@ retriever = db.as_retriever(search_kwargs={"k": 5})
 
 docs = retriever.get_relevant_documents("Codes for weather type, visibility and UV")
 
-# Build the prompt
-response_schemas = [
-    ResponseSchema(name="summary", description="A summary of the weather"),
-    ResponseSchema(name="full", description="A full breakdown of the weather"),
-    ResponseSchema(
-        name="status",
-        description="A status of the weather. Can be one of: Poor, Fair, Average, Good or Very Good",
-    ),
-    ResponseSchema(
-        name="inspiring-message",
-        description="An uplifting message about the weather",
-    ),
-]
-output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-format_instructions = output_parser.get_format_instructions()
 
-template = """
-On the following lines is a CSV representation of the weather forecast for the next few days. 
-The first row contains the column names. 
-The datetime column is in format '%Y-%m-%d %H:%M:%S'. Each row represents a three-hour forecast from the row's datetime.
-The Weather Type is also known as Significant Weather.
-Use only this data for the summary and only the relevant datetimes.
------
-{csv}
------
-Use the following context to map any codes to words.
------
-{context}
------
-{format_instructions}
-"""
-
-human_template = """
-The current date & time is: {datetime}
-Summarise the weather for the next three hours as follows:
-1. Summarise like you are a weatherman, in no more than 150 words.
-2. Create a more detailed breakdown in no more than 200 words.
-3. Include the predicted status.
-4. Give an inspiring message based on the predicted status. For example if the weather is deemed 'Poor',
-give an uplifting message to lighten the mood.
-"""
-
-chat_prompt = ChatPromptTemplate(
-    messages=[
-        SystemMessagePromptTemplate.from_template(template),
-        HumanMessagePromptTemplate.from_template(human_template),
-    ],
-    partial_variables={"format_instructions": format_instructions},
-)
+# Prompts
+code_extract_prompt = prompts.code_mapping_extract.get_prompt()
+weather_summary_prompt = prompts.weather_summary.get_prompt()
 
 # Create the LLM reference
 llm = ChatOpenAI(
-    model_name="gpt-3.5-turbo", temperature=0.2, openai_api_key=open_ai_api_key
+    model_name="gpt-3.5-turbo", temperature=0, openai_api_key=open_ai_api_key
 )
 
-# Create the chain
-chain = load_qa_chain(llm=llm, chain_type="stuff", prompt=chat_prompt, verbose=True)
+# Create the chains
+code_extract_chain = LLMChain(
+    llm=llm,
+    prompt=code_extract_prompt,
+    output_key="code_mappings",
+    verbose=True,
+)
+
+summary_chain = LLMChain(
+    llm=llm, prompt=weather_summary_prompt, output_key="result", verbose=True
+)
+
+overall_chain = SequentialChain(
+    chains=[code_extract_chain, summary_chain],
+    input_variables=["api_documents", "csv", "datetime"],
+    output_variables=["result"],
+    verbose=True,
+)
 
 # Ask the question
+docs = [{"doc": doc.page_content} for doc in docs]
+
 with get_openai_callback() as cb:
-    response = chain(
+    response = overall_chain(
         {
-            "input_documents": docs,
+            "api_documents": docs,
             "csv": data_as_csv,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         },
