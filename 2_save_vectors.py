@@ -1,14 +1,12 @@
 import os
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from langchain.document_loaders import PyPDFLoader
+from langchain.embeddings import CacheBackedEmbeddings, OpenAIEmbeddings
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.storage import LocalFileStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import DeepLake
-
-from langchain.storage import InMemoryStore, LocalFileStore, RedisStore
-from langchain.embeddings import OpenAIEmbeddings, CacheBackedEmbeddings
-
 
 load_dotenv(".env")
 

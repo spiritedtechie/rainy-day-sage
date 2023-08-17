@@ -4,16 +4,17 @@ from datetime import datetime
 import requests
 from dotenv import load_dotenv
 from langchain.callbacks import get_openai_callback
-from langchain.chains import LLMChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CacheBackedEmbeddings, OpenAIEmbeddings
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.output_parsers import ResponseSchema, StructuredOutputParser
-from langchain.prompts.chat import (ChatPromptTemplate,
-                                    HumanMessagePromptTemplate,
-                                    SystemMessagePromptTemplate)
-from langchain.storage import InMemoryStore, LocalFileStore, RedisStore
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
+from langchain.storage import LocalFileStore
 from langchain.vectorstores import DeepLake
 
 from convert_to_csv import convert_to_csv
