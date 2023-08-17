@@ -6,13 +6,22 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import DeepLake
 
+from langchain.storage import InMemoryStore, LocalFileStore, RedisStore
+from langchain.embeddings import OpenAIEmbeddings, CacheBackedEmbeddings
+
+
 load_dotenv(".env")
 
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
+fs = LocalFileStore("./cache/")
+cached_embedder = CacheBackedEmbeddings.from_bytes_store(
+    embeddings, fs, namespace=embeddings.model
+)
+
 my_activeloop_org_id = os.getenv("ACTIVE_LOOP_ORG_ID")
-my_activeloop_dataset_name = "met_office"
+my_activeloop_dataset_name = "met_office_data"
 dataset_path = f"hub://{my_activeloop_org_id}/{my_activeloop_dataset_name}"
-db = DeepLake(dataset_path=dataset_path, embedding_function=embeddings)
+db = DeepLake(dataset_path=dataset_path, embedding_function=cached_embedder)
 
 document_loader = PyPDFLoader(file_path="data/met_office/datapoint_api_reference.pdf")
 document = document_loader.load()
