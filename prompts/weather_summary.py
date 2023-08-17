@@ -57,4 +57,4 @@ chat_prompt = ChatPromptTemplate(
 
 
 def get_prompt():
-    return chat_prompt
+    return output_parser, chat_prompt

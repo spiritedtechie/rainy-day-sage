@@ -12,7 +12,7 @@ Copy the `.env.example` file to `.env` and fill in the properties.
 
 ```
 pip install -r requirements.txt
-python 1_main.py
+python 1_run.py
 ```
 
 ## Result
