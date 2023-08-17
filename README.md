@@ -1,6 +1,6 @@
 # Rainy Day Sage
 It rains a lot here in the UK. Why not let a friendly LLM be your sage? It can provide you with a wise 
-and uplifting message if the weather forecast look bad.
+and uplifting message if the weather forecast looks bad.
 
 The LLM converts the weather forecast data from the MetOffice into a human readable form, and
 quotes an uplifting message in case of bad weather.
