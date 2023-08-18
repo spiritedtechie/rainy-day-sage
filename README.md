@@ -11,7 +11,14 @@ Mostly just a way for me to mess around with LLMs.
 Copy the `.env.example` file to `.env` and fill in the properties.
 
 ```
+# Do the following once
 pip install -r requirements.txt
+python pre-processing/1_vectorise_weather_api_document.py
+python pre-processing/2_vectorise_weather_code_mapping.py
+```
+
+Then run as many times as you like:
+```
 python 1_run.py
 ```
 
@@ -20,20 +27,9 @@ python 1_run.py
 The result from the LLM looks might look something like this:
 
 ```
-On the 19th of August, the weather is as follows:
-
-- Feels Like Temperature (C): 17
-- Wind Gust (mph): 29
-- Screen Relative Humidity (%): 79
-- Temperature (C): 20
-- Visibility: Good
-- Wind Direction (compass): SW
-- Wind Speed (mph): 16
-- Max UV Index: 3
-- Weather Type: Very Good
-- Precipitation Probability (%): 7
-
-The weather on the 19th of August is generally good, with a high temperature of 20°C and good visibility. However, there is a high wind gust of 29 mph and a relatively high humidity of 79%. 
-
-In case the weather is bad, here's a wise and uplifting message to lighten the mood: "Storms may come and go, but they can never dampen the spirit within. Embrace the rain and let it wash away any worries. Remember, after every storm, there's a rainbow waiting to brighten your day."
+{
+   "summary":"The weather forecast for today is a feels like temperature of 20°C with a maximum temperature of 22°C. The wind speed is 11 mph with gusts up to 25 mph. The screen relative humidity is 70%. The visibility is good, between 10-20 km. The wind direction is east-southeast. The UV index is 1, indicating low exposure. The weather type is partly cloudy with a 49% chance of precipitation.",
+   "status":"Average",
+   "inspiring-message":"Even though the weather may not be perfect, remember that every day is a new opportunity to make the most of what we have. Embrace the partly cloudy skies and enjoy the gentle breeze. Don't let a little rain dampen your spirits, instead see it as a chance to appreciate the beauty of nature. Remember, the sun will always shine again, and with it comes new possibilities. So go out there and make today a day to remember!"
+}
 ```
