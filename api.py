@@ -4,6 +4,6 @@ from service import get_forecast_summary
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
+def get_forecast():
     result = get_forecast_summary()
     return result

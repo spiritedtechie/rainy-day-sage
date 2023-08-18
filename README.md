@@ -22,6 +22,13 @@ Then run as many times as you like:
 python run_service.py
 ```
 
+Or to spin up a Flask API:
+
+```
+flask --app api run -p 3000
+curl http://127.0.0.1:3000
+```
+
 ## Result
 
 The result from the LLM looks might look something like this:
