@@ -20,6 +20,7 @@ load_dotenv(".env")
 
 open_ai_api_key = os.getenv("OPENAI_API_KEY")
 met_office_api_key = os.getenv("MET_OFFICE_KEY")
+met_office_data_url = os.getenv("MET_OFFICE_DATA_URL")
 
 # Get the relevant sections of the API reference i.e. codes and their meaning
 # Using a vector search
@@ -70,8 +71,8 @@ docs = [{"doc": doc.page_content} for doc in docs]
 def get_forecast_summary():
     # Get today's weather forecast from the API in JSON
     met_office_data = requests.get(
-    "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/351033?res=3hourly",
-    params={"res": "3hourly", "key": met_office_api_key},
+        met_office_data_url,
+        params={"res": "3hourly", "key": met_office_api_key},
     )
 
     # Convert it to a more meaningful, compact CSV to reduce tokens
@@ -89,4 +90,4 @@ def get_forecast_summary():
             return_only_outputs=True,
         )
         print(cb)
-        return parser.parse(response['result'])
+        return parser.parse(response["result"])
