@@ -1,0 +1,6 @@
+These only need to be run once in the order specific in the filenames.
+
+This saves on LLM token cost which would be incurred if running each time the application service is executed. 
+This is feasible since the data is static.
+
+The scripts will vectorise the static reference data and store in the Deep Lake vector database.
