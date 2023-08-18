@@ -19,14 +19,12 @@ open_ai_api_key = os.getenv("OPENAI_API_KEY")
 met_office_api_key = os.getenv("MET_OFFICE_KEY")
 met_office_data_url = os.getenv("MET_OFFICE_DATA_URL")
 
-# Get the relevant sections of the API reference i.e. codes and their meaning
-# Using a vector search
-db = get_vector_store()
-retriever = db.as_retriever(search_kwargs={"k": 5})
-docs = retriever.get_relevant_documents("Codes for weather type, visibility and UV")
+# Get the code mappings document (created by pre-processing/2_vectorise_weather_code_mapping.py)
+db = get_vector_store(dataset_name = "met_office_code_mappings")
+retriever = db.as_retriever(search_kwargs={"k": 1})
+docs = retriever.get_relevant_documents("Mapping codes")
 
 # Prompts
-code_extract_prompt = prompts.code_mapping_extract.get_prompt()
 parser, weather_summary_prompt = prompts.weather_summary.get_prompt()
 
 # Create the LLM reference
@@ -35,20 +33,13 @@ llm = ChatOpenAI(
 )
 
 # Create the chains
-code_extract_chain = LLMChain(
-    llm=llm,
-    prompt=code_extract_prompt,
-    output_key="code_mappings",
-    verbose=True,
-)
-
 summary_chain = LLMChain(
     llm=llm, prompt=weather_summary_prompt, output_key="result", verbose=True
 )
 
 overall_chain = SequentialChain(
-    chains=[code_extract_chain, summary_chain],
-    input_variables=["api_documents", "csv", "datetime"],
+    chains=[summary_chain],
+    input_variables=["code_mappings", "csv", "datetime"],
     output_variables=["result"],
     verbose=True,
 )
@@ -72,7 +63,7 @@ def get_forecast_summary():
     with get_openai_callback() as cb:
         response = overall_chain(
             {
-                "api_documents": docs,
+                "code_mappings": docs,
                 "csv": data_as_csv,
                 "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             },

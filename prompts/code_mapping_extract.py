@@ -2,7 +2,6 @@
 from langchain.output_parsers import ResponseSchema, StructuredOutputParser
 from langchain.prompts.chat import (
     ChatPromptTemplate,
-    HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
 
@@ -10,38 +9,43 @@ response_schemas = [
     ResponseSchema(
         name="weather type",
         type="json",
-        description="significant weather code mappings",
+        description="significant weather code mappings e.g. 0 maps to 'Clear night'",
     ),
     ResponseSchema(
         name="visibility",
         type="json",
-        description="visibility code mappings",
+        description="visibility code mappings e.g. VP maps to 'Very poor - Less than 1 km'",
     ),
-    ResponseSchema(name="uv", type="json", description="UV index mappings"),
+    ResponseSchema(
+        name="uv",
+        type="json",
+        description="UV index mappings e.g. 1-2 maps to 'Low exposure. No protection required. You can safely stay outside.'",
+    ),
 ]
 output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
 format_instructions = output_parser.get_format_instructions()
 
 template = """
-Meaningful labels should be extracted from the following, extracting 
-codes for significant weather, UV and visibility:
+Data should be extracted from the following:
 ---------
-{api_documents}
+{context}
 ---------
 {format_instructions}
 """
 
-human_template = """
-Extract meaningful labels against the codes.
+question = """
+Extract meaningful labels against the codes for all of the following, including all codes for each:
+1. Significant weather"
+2. UV"
+3. Visibility"
 """
 
 chat_prompt = ChatPromptTemplate(
     messages=[
         SystemMessagePromptTemplate.from_template(template),
-        HumanMessagePromptTemplate.from_template(human_template),
     ],
     partial_variables={"format_instructions": format_instructions},
-    input_variables=["api_documents"],
+    input_variables=["context"],
 )
 
 
