@@ -19,7 +19,7 @@ python pre-processing/2_vectorise_weather_code_mapping.py
 
 Then run as many times as you like:
 ```
-python 1_run.py
+python run_service.py
 ```
 
 ## Result
