@@ -10,7 +10,8 @@ from langchain.chat_models import ChatOpenAI
 import prompts.code_mapping_extract
 import prompts.weather_summary
 from transform.convert_to_csv import convert_to_csv
-from transform.transform_forecast_data import transform_data
+from transform.transform_forecast_data import (
+    filter_list_to_current_date_time, transform_to_list_of_json)
 from vector.vector_store import get_vector_store
 
 load_dotenv(".env")
@@ -20,7 +21,7 @@ met_office_api_key = os.getenv("MET_OFFICE_KEY")
 met_office_data_url = os.getenv("MET_OFFICE_DATA_URL")
 
 # Get the code mappings document (created by pre-processing/2_vectorise_weather_code_mapping.py)
-db = get_vector_store(dataset_name = "met_office_code_mappings")
+db = get_vector_store(dataset_name="met_office_code_mappings")
 retriever = db.as_retriever(search_kwargs={"k": 1})
 docs = retriever.get_relevant_documents("Mapping codes")
 
@@ -56,15 +57,16 @@ def get_forecast_summary():
     )
 
     # Convert it to a more meaningful, compact CSV to reduce tokens
-    object_list, object_keys = transform_data(met_office_data.json())
-    data_as_csv = convert_to_csv(object_list, object_keys)
+    object_list, object_keys = transform_to_list_of_json(met_office_data.json())
+    object_list = filter_list_to_current_date_time(object_list)
+    csv = convert_to_csv(object_list, object_keys)
 
     # Execute LLM chain
     with get_openai_callback() as cb:
         response = overall_chain(
             {
                 "code_mappings": docs,
-                "csv": data_as_csv,
+                "csv": csv,
                 "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             },
             return_only_outputs=True,
