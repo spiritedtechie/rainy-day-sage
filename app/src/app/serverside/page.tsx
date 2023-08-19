@@ -1,10 +1,10 @@
-import { appRouter } from "../api/trpc/trpc-router";
+import { appRouter } from "../api/trpc/router";
 
 /** This is a React Server Component */
 export default async function RSCPage() {
   const caller = appRouter.createCaller({});
   // call the tRPC endpoint
-  const message = await caller.hello();
+  const message = await caller.forecast.get();
 
   // we render this output on the server
   return (
