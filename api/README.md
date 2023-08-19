@@ -25,8 +25,8 @@ python run_service.py
 Or to spin up a Flask API:
 
 ```
-flask --app api run -p 3000
-curl http://127.0.0.1:3000
+flask --app api run -p 3001
+curl http://127.0.0.1:3001
 ```
 
 ## Result
