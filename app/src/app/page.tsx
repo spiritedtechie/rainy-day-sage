@@ -1,12 +1,11 @@
 import Message from "./message";
 
 export default function Home() {
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <Message/>
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-tr to-blue-400 from-green-500 p-10">
+      <div className="w-max">
+        <Message />
       </div>
     </main>
-  )
+  );
 }
