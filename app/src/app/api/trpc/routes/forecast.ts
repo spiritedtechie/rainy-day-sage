@@ -17,7 +17,6 @@ const fetchForecast = async () => {
 
 export const forecastRouter = router({
   get: publicProcedure.query(async () => {
-    console.log("wefwfewg")
     const result = await fetchForecast()
     return result;
   }),
