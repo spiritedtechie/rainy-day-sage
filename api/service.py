@@ -1,14 +1,14 @@
+import json
 import os
 from datetime import datetime
 
+import prompts.code_mapping_extract
+import prompts.weather_summary
 import requests
 from dotenv import load_dotenv
 from langchain.callbacks import get_openai_callback
 from langchain.chains import LLMChain, SequentialChain
 from langchain.chat_models import ChatOpenAI
-
-import prompts.code_mapping_extract
-import prompts.weather_summary
 from transform.convert_to_csv import convert_to_csv
 from transform.transform_forecast_data import (
     filter_list_to_current_date_time, transform_to_list_of_json)
@@ -19,6 +19,10 @@ load_dotenv(".env")
 open_ai_api_key = os.getenv("OPENAI_API_KEY")
 met_office_api_key = os.getenv("MET_OFFICE_KEY")
 met_office_data_url = os.getenv("MET_OFFICE_DATA_URL")
+
+with open("data/mocked_api_response.json") as file:
+    file_contents = file.read()
+    mock_json = json.loads(file_contents)
 
 # Get the code mappings document (created by pre-processing/2_vectorise_weather_code_mapping.py)
 db = get_vector_store(dataset_name="met_office_code_mappings")
@@ -50,6 +54,9 @@ docs = [{"doc": doc.page_content} for doc in docs]
 
 
 def get_forecast_summary():
+    if os.getenv("MOCK_DATA"):
+        return mock_json
+
     # Get today's weather forecast from the API in JSON
     met_office_data = requests.get(
         met_office_data_url,
