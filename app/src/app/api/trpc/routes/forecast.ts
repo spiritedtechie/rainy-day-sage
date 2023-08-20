@@ -8,7 +8,7 @@ type Forecast = {
 }
 
 const fetchForecast = async () => {
-  return await fetch('http://127.0.0.1:3001')
+  return await fetch('http://127.0.0.1:3001',{cache: "no-cache"})
     .then(res => res.json())
     .then(res => {
       return res as Forecast
