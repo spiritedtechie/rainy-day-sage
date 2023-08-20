@@ -28,7 +28,7 @@ Use the following code mappings to map any codes in the data to meaningful label
 -----
 {format_instructions}
 -----
-Summarise the weather for today as follows. Do not including the datetime:
+Summarise the weather for the next few hours as follows. Do not including the datetime:
 1. For the summary: Imagine you are a weatherman and summarise the data in no more than 200 words.
 2. For the predicted status: It must consider the temperature, chance of rain and weather type.
 3. For the inspiring message: It must be inspiring and uplifting. It must be no more than 300 words. It must be appropriate to the predicted status.
