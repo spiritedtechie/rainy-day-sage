@@ -17,12 +17,7 @@ python pre-processing/1_vectorise_weather_api_document.py
 python pre-processing/2_vectorise_weather_code_mapping.py
 ```
 
-Then run as many times as you like:
-```
-python run_service.py
-```
-
-Or to spin up a Flask API:
+Spin up the Flask API:
 
 ```
 flask --app api run -p 3001
