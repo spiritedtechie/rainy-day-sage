@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { appRouter } from "./api/trpc/router";
 
 type Message = {
@@ -51,7 +52,7 @@ export default async function Home() {
             key={message.key}
             className="md:flex rounded-xl shadow-lg border border-gray-500 p-10 mt-10"
           >
-            <img
+            <Image
               src={message.image}
               alt={message.image_alt_text}
               className="w-20 h-20 mx-auto md:mr-10"
