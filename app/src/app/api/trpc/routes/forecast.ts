@@ -9,7 +9,7 @@ type Forecast = {
 }
 
 const fetchForecast = async () => {
-  return await fetch('http://127.0.0.1:3001',{cache: "no-cache"})
+  return await fetch(process.env.BACKEND_API_URL || "http://127.0.0.1:3001", {cache: "no-cache"})
     .then(res => res.json())
     .then(res => {
       return res as Forecast
@@ -22,6 +22,7 @@ export const forecastRouter = router({
     try {
       return await fetchForecast()
     } catch(e){
+      console.log(e)
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Unable to fetch forecast data.',
