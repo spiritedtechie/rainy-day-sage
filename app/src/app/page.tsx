@@ -7,11 +7,13 @@ const getForecast = async () => {
     const forecast = await caller.forecast.get();
     return [
       {
+        key: "forecast",
         image: "/weatherperson.png",
         image_alt_text: "Weather Person",
         text: forecast.summary,
       },
       {
+        key: "inspiring-message",
         image: "/yoga.png",
         image_alt_text: "Yoga Person",
         text: forecast["inspiring-message"],
@@ -20,6 +22,7 @@ const getForecast = async () => {
   } catch (e) {
     return [
       {
+        key: "error",
         image: "/error.png",
         image_alt_text: "Error",
         text: "Sorry! I am unable to retrieve the weather forecast right now.",
@@ -37,7 +40,7 @@ export default async function Home() {
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-tr to-blue-400 from-green-500 p-5">
       <div className="w-max">
         {messages.map((message) => (
-          <div className="md:flex rounded-xl shadow-lg border border-gray-500 p-10 mt-10">
+          <div key={message.key} className="md:flex rounded-xl shadow-lg border border-gray-500 p-10 mt-10">
             <img
               src={message.image}
               alt={message.image_alt_text}
@@ -45,7 +48,7 @@ export default async function Home() {
             />
             <blockquote className="mt-5 md:mt-0">
               <p className="text-lg text-white font-medium font-bold">
-                "{message.text}"
+                &quot;{message.text}&quot;
               </p>
             </blockquote>
           </div>
