@@ -1,25 +1,38 @@
 import { appRouter } from "./api/trpc/router";
-import Image from "next/image";
+
+const getForecast = async () => {
+  const caller = appRouter.createCaller({});
+
+  try {
+    const forecast = await caller.forecast.get();
+    return [
+      {
+        image: "/weatherperson.png",
+        image_alt_text: "Weather Person",
+        text: forecast.summary,
+      },
+      {
+        image: "/yoga.png",
+        image_alt_text: "Yoga Person",
+        text: forecast["inspiring-message"],
+      },
+    ];
+  } catch (e) {
+    return [
+      {
+        image: "/error.png",
+        image_alt_text: "Error",
+        text: "Sorry! I am unable to retrieve the weather forecast right now.",
+      },
+    ];
+  }
+};
 
 /** This is a React Server Component */
-export default async function RSCPage() {
-  const caller = appRouter.createCaller({});
-  const forecast = await caller.forecast.get();
-
-  const messages = [
-    {
-      image: "/weatherperson.png",
-      image_alt_text: "Weather Person",
-      text: forecast.summary,
-    },
-    {
-      image: "/yoga.png",
-      image_alt_text: "Yoga Person",
-      text: forecast["inspiring-message"],
-    },
-  ];
-
+export default async function Home() {
   // we render this output on the server
+  const messages = await getForecast();
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-tr to-blue-400 from-green-500 p-5">
       <div className="w-max">

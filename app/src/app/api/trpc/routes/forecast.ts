@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 
 
@@ -17,7 +18,15 @@ const fetchForecast = async () => {
 
 export const forecastRouter = router({
   get: publicProcedure.query(async () => {
-    const result = await fetchForecast()
-    return result;
+    
+    try {
+      return await fetchForecast()
+    } catch(e){
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Unable to fetch forecast data.',
+        cause: e,
+      });
+    }
   }),
 });
