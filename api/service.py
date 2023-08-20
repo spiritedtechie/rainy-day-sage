@@ -9,12 +9,17 @@ from dotenv import load_dotenv
 from langchain.callbacks import get_openai_callback
 from langchain.chains import LLMChain, SequentialChain
 from langchain.chat_models import ChatOpenAI
+from log_config import get_logger
 from transform.convert_to_csv import convert_to_csv
 from transform.transform_forecast_data import (
-    filter_list_to_current_date_time, transform_to_list_of_json)
+    filter_list_to_current_date_time,
+    transform_to_list_of_json,
+)
 from vector.vector_store import get_vector_store
 
 load_dotenv(".env")
+
+log = get_logger()
 
 open_ai_api_key = os.getenv("OPENAI_API_KEY")
 met_office_api_key = os.getenv("MET_OFFICE_KEY")
@@ -78,5 +83,5 @@ def get_forecast_summary():
             },
             return_only_outputs=True,
         )
-        print(cb)
+        log.debug(cb)
         return parser.parse(response["result"])
