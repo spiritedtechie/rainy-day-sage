@@ -59,7 +59,7 @@ docs = [{"doc": doc.page_content} for doc in docs]
 
 
 def get_forecast_summary():
-    if os.getenv("MOCK_DATA"):
+    if os.getenv("MOCK_DATA", 'True') == 'True':
         return mock_json
 
     # Get today's weather forecast from the API in JSON
