@@ -1,6 +1,13 @@
 import { appRouter } from "./api/trpc/router";
 
-const getForecast = async () => {
+type Message = {
+  key: string;
+  image: string;
+  image_alt_text: string;
+  text: string;
+};
+
+const getForecast = async (): Promise<Message[]> => {
   const caller = appRouter.createCaller({});
 
   try {
@@ -40,7 +47,10 @@ export default async function Home() {
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-tr to-blue-400 from-green-500 p-5">
       <div className="w-max">
         {messages.map((message) => (
-          <div key={message.key} className="md:flex rounded-xl shadow-lg border border-gray-500 p-10 mt-10">
+          <div
+            key={message.key}
+            className="md:flex rounded-xl shadow-lg border border-gray-500 p-10 mt-10"
+          >
             <img
               src={message.image}
               alt={message.image_alt_text}
