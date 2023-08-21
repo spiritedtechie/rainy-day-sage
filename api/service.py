@@ -30,7 +30,7 @@ with open("data/mocked_api_response.json") as file:
     mock_json = json.loads(file_contents)
 
 # Get the code mappings document (created by pre-processing/2_vectorise_weather_code_mapping.py)
-db = get_vector_store(dataset_name="met_office_code_mappings")
+db = get_vector_store(dataset_name="met_office_code_mappings", read_only=True)
 retriever = db.as_retriever(search_kwargs={"k": 1})
 docs = retriever.get_relevant_documents("Mapping codes")
 
