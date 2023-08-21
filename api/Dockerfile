@@ -6,6 +6,4 @@ RUN pip install -r requirements.txt
 
 ADD . .
 
-EXPOSE 3001
-
 CMD ["python", "api.py"]

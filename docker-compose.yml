@@ -1,0 +1,25 @@
+services:
+  app:
+    build:
+      context: ./app
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - network
+    environment:
+      NODE_ENV: production
+      BACKEND_API_URL: http://api:3001
+  api:
+    build:
+      context: ./api
+    expose:
+      - "3001"
+    # ports:
+    #   - "3001:3001"
+    networks:
+      - network
+
+networks:
+  network:
