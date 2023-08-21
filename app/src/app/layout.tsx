@@ -6,7 +6,7 @@ import { TrpcProvider } from "@/utils/trpc-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Rainy Day Sage",
+  title: "Weather Sage",
   description: "Let the weather sage brighten up your day",
 };
 
