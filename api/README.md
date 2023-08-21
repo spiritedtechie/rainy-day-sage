@@ -1,15 +1,20 @@
-# Rainy Day Sage
-It rains a lot here in the UK. Why not let a friendly LLM be your sage? It can provide you with a wise 
-and uplifting message if the weather forecast looks bad.
+## Description
+Fetches forecast data from the UK MetOffice, and interacts with an LLM to 
+produce a natural language summary.
 
-The LLM converts the weather forecast data from the MetOffice into a human readable form, and
-quotes an uplifting message in case of bad weather.
 
-Mostly just a way for me to mess around with LLMs.
+## External services
+The following are required and need to be configured in the `.env` file.
 
-## Running it
+1. **MetOffice Datapoint** - API for UK weather data. Sign up [here](https://www.metoffice.gov.uk/services/data/datapoint/getting-started).
+2. **OpenAI** - well known cloud-based LLM provider e.g. GPT-3 etc. Sign up [here](https://openai.com/).
+3. **ActiveLoop DeepLake** - a cloud-based vector store with a free tier. Sign up [here](https://www.activeloop.ai/).
+
+## Running locally
+
 Copy the `.env.example` file to `.env` and fill in the properties.
 
+Vectorise the reference data:
 ```
 # Do the following once
 pip install -r requirements.txt
@@ -26,7 +31,7 @@ curl http://127.0.0.1:3001
 
 ## Result
 
-The result from the LLM looks might look something like this:
+The result from the api looks might look something like this:
 
 ```
 {
