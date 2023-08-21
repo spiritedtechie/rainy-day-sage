@@ -12,10 +12,11 @@ from langchain.chat_models import ChatOpenAI
 from log_config import get_logger
 from transform.convert_to_csv import convert_to_csv
 from transform.transform_forecast_data import (
-    filter_list_to_current_date_time,
+    filter_list_to_date_time,
     transform_to_list_of_json,
 )
 from vector.vector_store import get_vector_store
+from functools import lru_cache
 
 load_dotenv(".env")
 
@@ -58,19 +59,26 @@ overall_chain = SequentialChain(
 docs = [{"doc": doc.page_content} for doc in docs]
 
 
-def get_forecast_summary():
-    if os.getenv("MOCK_DATA", 'True') == 'True':
-        return mock_json
+@lru_cache
+def _get_forecast_summary(date_time: datetime):
+    """
+    Get the forecast data for the supplied date time.
 
-    # Get today's weather forecast from the API in JSON
-    met_office_data = requests.get(
+    Uses UK Met Office API data to prompt the LLM for a summary, inspiring message etc.
+
+    This function has an LRU cache - if the date_time is requested multiple times,
+    the cached results will be used to avoid expensive LLM calls.
+    """
+    api_response = requests.get(
         met_office_data_url,
         params={"res": "3hourly", "key": met_office_api_key},
     )
 
-    # Convert it to a more meaningful, compact CSV to reduce tokens
-    object_list, object_keys = transform_to_list_of_json(met_office_data.json())
-    object_list = filter_list_to_current_date_time(object_list)
+    # Transform to a more meaningful, compact CSV to reduce tokens
+    object_list, object_keys = transform_to_list_of_json(api_response.json())
+    object_list = filter_list_to_date_time(object_list, date_time)
+    if not object_list:
+        raise Exception(f"Data not found for date/time {date_time}")
     csv = convert_to_csv(object_list, object_keys)
 
     # Execute LLM chain
@@ -84,4 +92,15 @@ def get_forecast_summary():
             return_only_outputs=True,
         )
         log.debug(cb)
-        return parser.parse(response["result"])
+
+    return parser.parse(response["result"])
+
+
+def get_forecast_summary():
+    if os.getenv("MOCK_DATA", "True") == "True":
+        return mock_json
+
+    # get datetime for truncated (to zero) after the hour
+    current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
+
+    return _get_forecast_summary(current_hour)
