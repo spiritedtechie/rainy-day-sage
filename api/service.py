@@ -97,9 +97,6 @@ def _get_forecast_summary(date_time: datetime):
 
 
 def get_forecast_summary():
-    if os.getenv("MOCK_DATA", "True") == "True":
-        return mock_json
-
     # get datetime for truncated (to zero) after the hour
     current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
 
