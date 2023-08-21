@@ -3,38 +3,38 @@ from datetime import datetime, timedelta
 
 def transform_to_list_of_json(data):
     """
-    Returns the weather forecast for each datetime is an object list that looks like:
+    Returns the weather forecast for each datetime as an object list that looks like:
     [
         {"Datetime": "2023-08-16 09:00:00", "Wind Gust (mph)": "27", "Temperature (C)": "25", ... },
         {...}
     ]
     """
-    codeMappings = _forecastPropertyCodeMappings(data)
+    code_mappings = _forecast_code_mappings(data)
 
     object_keys = []
     object_list = []
 
     object_keys.append("Datetime")
-    for i in codeMappings.values():
+    for i in code_mappings.values():
         object_keys.append(i["name"])
 
     for period in data["SiteRep"]["DV"]["Location"]["Period"]:
-        dateText = period["value"]
+        date_text = period["value"]
 
-        threeHourlyBlock = period["Rep"]
-        for block in threeHourlyBlock:
-            minutesFromMidnight = int(block["$"])
-            dateTime = datetime.strptime(dateText, "%Y-%m-%dZ")
-            dateTime = dateTime + timedelta(minutes=minutesFromMidnight)
+        three_hourly_block = period["Rep"]
+        for block in three_hourly_block:
+            minutes_from_midnight = int(block["$"])
+            date_time = datetime.strptime(date_text, "%Y-%m-%dZ")
+            date_time = date_time + timedelta(minutes=minutes_from_midnight)
 
-            forecastObj = {}
-            forecastObj["Datetime"] = dateTime.strftime("%Y-%m-%d %H:%M:%S")
+            forecast_obj = {}
+            forecast_obj["Datetime"] = date_time.strftime("%Y-%m-%d %H:%M:%S")
 
             for key in block.keys():
                 if key != "$":
-                    forecastObj[codeMappings[key]["name"]] = block[key]
+                    forecast_obj[code_mappings[key]["name"]] = block[key]
 
-            object_list.append(forecastObj)
+            object_list.append(forecast_obj)
 
     return object_list, object_keys
 
@@ -64,7 +64,7 @@ def _is_datetime_within_3_hours_from(
     return date_time_to_check >= window_start and date_time_to_check < window_end
 
 
-def _forecastPropertyCodeMappings(data):
+def _forecast_code_mappings(data):
     """
     Creates an accessible data structure to lookup label for a forecast property code i.e.
     {
@@ -72,10 +72,10 @@ def _forecastPropertyCodeMappings(data):
         ...
     }
     """
-    codeMappings = {}
+    code_mappings = {}
     for code in data["SiteRep"]["Wx"]["Param"]:
         code_name = code["name"]
-        codeMappings[code_name] = {
+        code_mappings[code_name] = {
             "name": f"""{code["$"]} ({code["units"]})""",
         }
-    return codeMappings
+    return code_mappings
