@@ -10,11 +10,7 @@ from langchain.callbacks import get_openai_callback
 from langchain.chains import LLMChain, SequentialChain
 from langchain.chat_models import ChatOpenAI
 from log_config import get_logger
-from transform.convert_to_csv import convert_to_csv
-from transform.transform_forecast_data import (
-    filter_list_to_date_time,
-    transform_to_list_of_json,
-)
+from transform.transform_forecast_data import transform
 from vector.vector_store import get_vector_store
 from functools import lru_cache
 
@@ -75,11 +71,7 @@ def _get_forecast_summary(date_time: datetime):
     )
 
     # Transform to a more meaningful, compact CSV to reduce tokens
-    object_list, object_keys = transform_to_list_of_json(api_response.json())
-    object_list = filter_list_to_date_time(object_list, date_time)
-    if not object_list:
-        raise Exception(f"Data not found for date/time {date_time}")
-    csv = convert_to_csv(object_list, object_keys)
+    csv = transform(api_response.json())
 
     # Execute LLM chain
     with get_openai_callback() as cb:
