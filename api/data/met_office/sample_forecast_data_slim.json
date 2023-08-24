@@ -1,0 +1,157 @@
+{
+    "SiteRep": {
+        "Wx": {
+            "Param": [
+                {
+                    "name": "F",
+                    "units": "C",
+                    "$": "Feels Like Temperature"
+                },
+                {
+                    "name": "G",
+                    "units": "mph",
+                    "$": "Wind Gust"
+                },
+                {
+                    "name": "H",
+                    "units": "%",
+                    "$": "Screen Relative Humidity"
+                },
+                {
+                    "name": "T",
+                    "units": "C",
+                    "$": "Temperature"
+                },
+                {
+                    "name": "V",
+                    "units": "",
+                    "$": "Visibility"
+                },
+                {
+                    "name": "D",
+                    "units": "compass",
+                    "$": "Wind Direction"
+                },
+                {
+                    "name": "S",
+                    "units": "mph",
+                    "$": "Wind Speed"
+                },
+                {
+                    "name": "U",
+                    "units": "",
+                    "$": "Max UV Index"
+                },
+                {
+                    "name": "W",
+                    "units": "",
+                    "$": "Weather Type"
+                },
+                {
+                    "name": "Pp",
+                    "units": "%",
+                    "$": "Precipitation Probability"
+                }
+            ]
+        },
+        "DV": {
+            "dataDate": "2023-08-14T11:00:00Z",
+            "type": "Forecast",
+            "Location": {
+                "i": "351033",
+                "lat": "52.3676",
+                "lon": "-1.4702",
+                "name": "COVENTRY AIRPORT",
+                "country": "ENGLAND",
+                "continent": "EUROPE",
+                "elevation": "80.0",
+                "Period": [
+                    {
+                        "type": "Day",
+                        "value": "2023-08-14Z",
+                        "Rep": [
+                            {
+                                "D": "S",
+                                "F": "15",
+                                "G": "20",
+                                "H": "95",
+                                "Pp": "90",
+                                "S": "4",
+                                "T": "15",
+                                "V": "MO",
+                                "W": "15",
+                                "U": "1",
+                                "$": "360"
+                            },
+                            {
+                                "F": "15",
+                                "D": "S",
+                                "G": "22",
+                                "H": "92",
+                                "Pp": "25",
+                                "S": "11",
+                                "T": "17",
+                                "V": "MO",
+                                "W": "8",
+                                "U": "3",
+                                "$": "540"
+                            },
+                            {
+                                "D": "S",
+                                "F": "17",
+                                "G": "29",
+                                "H": "87",
+                                "Pp": "16",
+                                "S": "11",
+                                "T": "18",
+                                "V": "MO",
+                                "W": "8",
+                                "U": "5",
+                                "$": "720"
+                            },
+                            {
+                                "D": "SSW",
+                                "F": "16",
+                                "G": "27",
+                                "H": "81",
+                                "Pp": "29",
+                                "S": "16",
+                                "T": "19",
+                                "V": "VG",
+                                "W": "7",
+                                "U": "3",
+                                "$": "900"
+                            },
+                            {
+                                "D": "SW",
+                                "F": "16",
+                                "G": "22",
+                                "H": "76",
+                                "Pp": "6",
+                                "S": "11",
+                                "T": "18",
+                                "V": "VG",
+                                "W": "7",
+                                "U": "1",
+                                "$": "1080"
+                            },
+                            {
+                                "D": "WSW",
+                                "F": "15",
+                                "G": "18",
+                                "H": "81",
+                                "Pp": "6",
+                                "S": "9",
+                                "T": "16",
+                                "V": "VG",
+                                "W": "2",
+                                "U": "0",
+                                "$": "1260"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
