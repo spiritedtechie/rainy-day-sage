@@ -64,7 +64,11 @@ Convert the data to CSV format.
 """
 
 test_data_sets = {
-    "weather_forecast": {
+    "weather_forecast_full": {
+        "file_path": "data/met_office/sample_forecast_data.json",
+        "prompt_template": forecast_template,
+    },
+    "weather_forecast_slim": {
         "file_path": "experiments/sample_forecast_data_slim.json",
         "prompt_template": forecast_template,
     },
