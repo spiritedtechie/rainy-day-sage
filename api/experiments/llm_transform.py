@@ -42,6 +42,7 @@ custom_domain_template = """
 Here is some JSON data.
 Each Block becomes a row.
 Each Block field code can be mapped to a meaningful label in the Dict Map.
+For example, field with code 'A' becomes column 'Feels'.
 Each Block has a 'tm' field which represents the "minutes from midnight" from the Segment date.
 You have to calculate the actual date-time using the Segment date and "minutes from midnight".
 For example, if the Segment date is 2023-07-10, and the 'tm' value is 540, this represents 2023-07-10 09:00:00.
