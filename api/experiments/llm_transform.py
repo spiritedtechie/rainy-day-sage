@@ -26,9 +26,9 @@ open_ai_api_key = os.getenv("OPENAI_API_KEY")
 forecast_template = """
 Here is some JSON data.
 Each Rep becomes a row.
-Each Rep has a '$' field which represents the "minutes from midnight" from the period date.
+Each Rep has a '$' field which represents the "minutes from midnight" from the Period date.
 You have to calculate the actual date-time using the Period date and "minutes from midnight".
-For example, if the period date is 2023-07-10, and the $ value is 540, this represents 2023-07-10 09:00:00.
+For example, if the Period date is 2023-07-10, and the $ value is 540, this represents 2023-07-10 09:00:00.
 ---------
 {json}
 ---------
@@ -45,6 +45,12 @@ Each Block field code can be mapped to a meaningful label in the Dict Map.
 Each Block has a 'tm' field which represents the "minutes from midnight" from the Segment date.
 You have to calculate the actual date-time using the Segment date and "minutes from midnight".
 For example, if the Segment date is 2023-07-10, and the 'tm' value is 540, this represents 2023-07-10 09:00:00.
+Map the 'H' field like follows: 
+- 'GO' maps to 'Good'
+- 'VG' maps to 'Very Good'
+- 'P' maps to 'Poor'
+- 'A' maps to 'Average'
+- 'F' maps to 'Unknown'
 ---------
 {json}
 ---------
