@@ -3,7 +3,7 @@ python-dotenv==1.0.0
 deeplake==3.6.20
 langchain==0.0.272
 openai==0.27.9
-pypdf==3.15.2
+pypdf==3.17.0
 tiktoken==0.4.0
 jq==1.4.1
 requests==2.31.0
