@@ -3,9 +3,14 @@ python-dotenv==1.0.0
 deeplake==3.6.20
 langchain==0.0.272
 openai==0.27.9
-pypdf==3.15.2
+pypdf==3.17.0
 tiktoken==0.4.0
 jq==1.4.1
-requests==2.31.0
+requests==2.32.2
 flask==2.3.3
 waitress==2.1.2
+aiobotocore>=2.9.1 # not directly required, pinned by Snyk to avoid a vulnerability
+aiohttp>=3.9.4 # not directly required, pinned by Snyk to avoid a vulnerability
+numpy>=1.22.2 # not directly required, pinned by Snyk to avoid a vulnerability
+pillow>=10.3.0 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
